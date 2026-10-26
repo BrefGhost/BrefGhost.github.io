@@ -3,11 +3,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pathomporn Rakpukdee | Portfolio</title>
   <meta name="description" content="Portfolio ของ ปฐมพร รักภักดี นักศึกษาวิทยาการคอมพิวเตอร์ มหาวิทยาลัยสวนดุสิต สนใจ Data Engineering, Analytics และการพัฒนาเกม พร้อมผลงาน ETL และ Moon Valley Farm">
-  <link rel="stylesheet" href="./assets/styles.css">
   <meta name="theme-color" content="#080D19">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pathomporn Rakpukdee — Portfolio">
   <meta property="og:description" content="ปฐมพร รักภักดี · Computer Science, Suan Dusit University · Data Engineering, Analytics & Game Development">
+  <link rel="stylesheet" href="./assets/styles.css">
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Thai:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
@@ -20,6 +20,8 @@
       --color-accent: #DAC495;
       --color-rule: #283346;
       --color-diagram: #779CC6;
+      --color-cyan: #8BD4EF;
+      --color-indigo: #1B2343;
     }
 
     body {
@@ -37,121 +39,174 @@
       font-family: 'Space Grotesk', sans-serif;
     }
 
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--color-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--color-surface); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--color-rule); }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    *:focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 4px; }
+
+    /* Scroll Reveals */
+    .reveal { opacity: 1; transform: none; transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveals-ready .reveal:not(.active) { opacity: 0; transform: translateY(20px); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    /* Fallback if JS disabled */
+    .no-js .reveal { opacity: 1; transform: none; }
+
+    /* Orbits & Glows */
     .orbit-ring {
       position: absolute;
-      border: 1px solid rgba(40, 51, 70, 0.4);
+      border: 1px solid rgba(139, 212, 239, 0.15);
       border-radius: 50%;
       pointer-events: none;
       z-index: 0;
     }
 
-    .star {
-      position: absolute;
-      background-color: var(--color-text-main);
-      border-radius: 50%;
-      pointer-events: none;
+    .hero-glow {
+      background: radial-gradient(circle, var(--color-indigo) 0%, transparent 60%);
       opacity: 0.6;
-      z-index: 0;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-      .hover-star-spin:hover {
-        transform: rotate(45deg);
-      }
+    .hero-cyan-glow {
+      background: radial-gradient(circle, var(--color-cyan) 0%, transparent 50%);
+      opacity: 0.15;
+      animation: nebula-breathe 12s ease-in-out infinite alternate;
+    }
+    @keyframes nebula-breathe { to { opacity: 0.24; scale: 1.16; } }
+    .name-starlight { color: var(--color-cyan); text-shadow: 0 0 45px rgba(139,212,239,.16); }
+
+    /* Animations */
+    @keyframes spin-slow { to { transform: rotate(1turn); } }
+    @keyframes spin-reverse { to { transform: rotate(-1turn); } }
+    @keyframes pulse-flow {
+      0% { box-shadow: 0 0 0 0 rgba(139, 212, 239, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(139, 212, 239, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(139, 212, 239, 0); }
     }
 
-    /* Scrollbar styling for webkit */
-    ::-webkit-scrollbar {
-      width: 8px;
+    .animate-spin-slow { animation: spin-slow 60s linear infinite; }
+    .animate-spin-reverse { animation: spin-reverse 40s linear infinite; }
+    .animate-flow { animation: pulse-flow 2s infinite; }
+
+    /* Pointer Glow */
+    .glow-card {
+      position: relative;
+      overflow: hidden;
     }
-    ::-webkit-scrollbar-track {
-      background: var(--color-bg);
+    .glow-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(139, 212, 239, 0.06), transparent 40%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 1;
     }
-    ::-webkit-scrollbar-thumb {
+    .glow-card:hover::before { opacity: 1; }
+    @media (pointer: coarse) { .glow-card::before { display: none; } }
+
+    /* Dialogs */
+    dialog {
       background: var(--color-surface);
-      border-radius: 4px;
+      color: var(--color-text-main);
+      border: 1px solid var(--color-rule);
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      padding: 0;
+      margin: auto;
+      max-height: calc(100dvh - 48px);
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--color-rule);
+    dialog::backdrop {
+      background: rgba(8, 13, 25, 0.85);
+      backdrop-filter: blur(4px);
+    }
+    dialog[open] {
+      animation: dialog-enter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @keyframes dialog-enter {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Smooth scrolling */
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 100px;
+    /* Motion Toggle specific */
+    html.motion-paused { scroll-behavior: auto; }
+    .motion-reduced *, .motion-reduced *::before, .motion-reduced *::after {
+      animation-play-state: paused !important;
+      transition: none !important;
     }
-
+    .motion-reduced .reveal { opacity: 1 !important; transform: none !important; }
+    .motion-reduced .glow-card::before { display: none; }
+    .motion-reduced dialog[open] { animation: none !important; opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveals-ready .reveal:not(.active) { opacity: 1; transform: none; }
+    }
+    [hidden] { display: none !important; }
+
+    canvas#celestial-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* Focus styles for accessibility */
-    *:focus-visible {
-      outline: 2px solid var(--color-accent);
-      outline-offset: 4px;
-    }
-
-    details > summary {
-      list-style: none;
-    }
-    details > summary::-webkit-details-marker {
-      display: none;
-    }
   </style>
 </head>
 <body>
   <div class="min-h-screen relative" id="app-root">
-
-    <!-- Background Elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <!-- Orbits -->
-      <div class="orbit-ring w-[600px] h-[600px] top-[-100px] right-[-200px] opacity-40 md:w-[1000px] md:h-[1000px] md:top-[-300px] md:right-[-400px]"></div>
-      <div class="orbit-ring w-[800px] h-[800px] top-[-200px] right-[-300px] opacity-20 md:w-[1400px] md:h-[1400px] md:top-[-500px] md:right-[-600px]"></div>
-
-      <!-- Stars (static for reduced motion) -->
-      <div class="star w-1 h-1 top-[15%] left-[10%] opacity-80"></div>
-      <div class="star w-[2px] h-[2px] top-[25%] right-[20%] opacity-40"></div>
-      <div class="star w-1.5 h-1.5 top-[60%] left-[8%] opacity-60"></div>
-      <div class="star w-[3px] h-[3px] top-[75%] right-[15%] opacity-50"></div>
-      <div class="star w-1 h-1 top-[40%] left-[80%] opacity-30"></div>
-      <div class="star w-2 h-2 top-[85%] left-[30%] opacity-20"></div>
-    </div>
+    <canvas id="celestial-canvas" aria-hidden="true"></canvas>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-40 top-0 border-b border-[#283346] bg-[#080D19]/95 backdrop-blur-sm transition-all duration-300">
+    <nav class="fixed w-full z-40 top-0 border-b border-[#283346] bg-[#080D19]/95 backdrop-blur-sm transition-all">
       <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] h-20 flex items-center justify-between">
         <a href="#hero" id="nav-home" class="flex items-center gap-3 group text-[#F0EFEA] hover:text-[#DAC495] transition-colors">
-          <iconify-icon icon="ph:star-four-fill" class="text-xs text-[#DAC495] hover-star-spin transition-transform duration-500"></iconify-icon>
-          <span class="font-display font-medium text-lg tracking-wide">Pathomporn Rakpukdee</span>
+          <iconify-icon icon="ph:star-four-fill" class="text-xs text-[#DAC495]"></iconify-icon>
+          <span class="font-display font-medium text-base sm:text-lg tracking-wide">Pathomporn<span class="hidden sm:inline"> Rakpukdee</span></span>
         </a>
 
-        <div class="hidden lg:flex items-center gap-5">
-          <a href="#interests" id="nav-interests" class="text-[14px] text-[#9AABC6] hover:text-[#DAC495] font-medium transition-colors uppercase tracking-widest">Interests</a>
-          <a href="#projects" id="nav-projects" class="text-[14px] text-[#9AABC6] hover:text-[#DAC495] font-medium transition-colors uppercase tracking-widest">Projects</a>
-          <a href="#about" id="nav-about" class="text-[14px] text-[#9AABC6] hover:text-[#DAC495] font-medium transition-colors uppercase tracking-widest">About</a>
-          <a href="#contact" id="nav-contact" class="text-[14px] text-[#DAC495] font-medium uppercase tracking-widest">Contact</a>
-          <a href="https://github.com/BrefGhost" id="nav-github" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[14px] text-[#9AABC6] hover:text-[#DAC495] font-medium transition-colors uppercase tracking-widest">
+        <div class="hidden lg:flex items-center gap-6">
+          <a href="#interests" id="nav-interests" class="text-[13px] text-[#9AABC6] hover:text-[#8BD4EF] font-medium transition-colors uppercase tracking-widest">Interests</a>
+          <a href="#projects" id="nav-projects" class="text-[13px] text-[#9AABC6] hover:text-[#8BD4EF] font-medium transition-colors uppercase tracking-widest">Projects</a>
+          <a href="#about" id="nav-about" class="text-[13px] text-[#9AABC6] hover:text-[#8BD4EF] font-medium transition-colors uppercase tracking-widest">About</a>
+          <a href="#contact" id="nav-contact" class="text-[13px] text-[#DAC495] font-medium transition-colors hover:text-white uppercase tracking-widest">Contact</a>
+          <div class="w-px h-4 bg-[#283346]"></div>
+          <button id="motion-toggle" aria-pressed="true" class="inline-flex items-center gap-2 p-3 text-[20px] text-[#8BD4EF] hover:text-[#F0EFEA] transition-colors" aria-label="พักแอนิเมชัน" title="พักแอนิเมชัน">
+            <iconify-icon icon="ph:sparkle-fill" id="motion-icon"></iconify-icon>
+            <span class="text-[11px] tracking-wide" data-motion-label>Motion on</span>
+          </button>
+          <a href="https://github.com/BrefGhost" id="nav-github" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[13px] text-[#9AABC6] hover:text-[#DAC495] font-medium transition-colors uppercase tracking-widest">
             <span>GitHub</span>
             <iconify-icon icon="ph:arrow-up-right"></iconify-icon>
           </a>
         </div>
 
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="lg:hidden text-[#9AABC6] hover:text-[#F0EFEA] p-3" aria-label="เปิดหรือปิดเมนู" aria-controls="mobile-menu" aria-expanded="false">
-          <iconify-icon icon="ph:list" class="text-2xl"></iconify-icon>
-        </button>
+        <!-- Mobile Controls -->
+        <div class="flex items-center gap-4 lg:hidden">
+          <button id="mobile-motion-toggle" aria-pressed="true" class="p-3 text-[20px] text-[#8BD4EF]" aria-label="พักแอนิเมชัน" title="พักแอนิเมชัน">
+             <iconify-icon icon="ph:sparkle-fill"></iconify-icon>
+          </button>
+          <button id="mobile-menu-btn" class="text-[#9AABC6] hover:text-[#F0EFEA] p-3" aria-label="เปิดหรือปิดเมนู" aria-controls="mobile-menu" aria-expanded="false">
+            <iconify-icon icon="ph:list" class="text-2xl"></iconify-icon>
+          </button>
+        </div>
       </div>
 
       <!-- Mobile Menu Dropdown -->
       <div id="mobile-menu" class="hidden lg:hidden border-t border-[#283346] bg-[#080D19] px-6 py-4 space-y-4">
-        <a id="mobile-nav-interests" href="#interests" onclick="toggleMobileMenu()" class="block text-[#9AABC6] hover:text-[#DAC495] font-medium uppercase tracking-widest py-2">Interests</a>
-        <a id="mobile-nav-projects" href="#projects" onclick="toggleMobileMenu()" class="block text-[#9AABC6] hover:text-[#DAC495] font-medium uppercase tracking-widest py-2">Projects</a>
-        <a id="mobile-nav-about" href="#about" onclick="toggleMobileMenu()" class="block text-[#9AABC6] hover:text-[#DAC495] font-medium uppercase tracking-widest py-2">About</a>
-        <a id="mobile-nav-contact" href="#contact" onclick="toggleMobileMenu()" class="block text-[#DAC495] font-medium uppercase tracking-widest py-2">Contact</a>
-        <a id="mobile-nav-github" href="https://github.com/BrefGhost" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[#9AABC6] hover:text-[#DAC495] font-medium uppercase tracking-widest py-2">
-          <span>GitHub</span>
-          <iconify-icon icon="ph:arrow-up-right"></iconify-icon>
+        <a id="preview-link-1" href="#interests" class="block text-[#9AABC6] font-medium uppercase tracking-widest py-2 mobile-link">Interests</a>
+        <a id="preview-link-2" href="#projects" class="block text-[#9AABC6] font-medium uppercase tracking-widest py-2 mobile-link">Projects</a>
+        <a id="preview-link-3" href="#about" class="block text-[#9AABC6] font-medium uppercase tracking-widest py-2 mobile-link">About</a>
+        <a id="preview-link-4" href="#contact" class="block text-[#DAC495] font-medium uppercase tracking-widest py-2 mobile-link">Contact</a>
+        <a id="preview-link-5" href="https://github.com/BrefGhost" target="_blank" class="flex items-center gap-2 text-[#9AABC6] font-medium uppercase tracking-widest py-2" rel="noopener noreferrer">
+          <span>GitHub</span> <iconify-icon icon="ph:arrow-up-right"></iconify-icon>
         </a>
       </div>
     </nav>
@@ -159,31 +214,35 @@
     <main class="relative z-10 pt-20">
 
       <!-- Hero Section -->
-      <section id="hero" class="min-h-[85vh] flex items-center border-b border-[#283346]">
-        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] w-full pt-16 pb-24 md:pt-24 md:pb-32">
+      <section id="hero" class="min-h-[85vh] flex items-center border-b border-[#283346] relative overflow-hidden">
+        <!-- Atmospheric glow behind hero -->
+        <div class="absolute top-1/2 right-1/4 w-[800px] h-[800px] -translate-y-1/2 translate-x-1/4 hero-glow rounded-full pointer-events-none z-0"></div>
+        <div class="absolute top-1/2 right-1/4 w-[400px] h-[400px] -translate-y-1/2 translate-x-1/4 hero-cyan-glow rounded-full pointer-events-none z-0"></div>
+
+        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] w-full pt-16 pb-24 md:pt-24 md:pb-32 relative z-10 reveal">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center">
             <div class="order-2 lg:order-1 max-w-2xl">
               <div class="mb-8 flex items-center gap-4">
-                <span class="h-[1px] w-12 bg-[#DAC495]"></span>
-                <span class="text-[12px] uppercase tracking-[0.2em] text-[#DAC495] font-medium">Fourth-Year Student</span>
+                <span class="h-[1px] w-12 bg-[#8BD4EF]"></span>
+                <span class="text-[12px] uppercase tracking-[0.2em] text-[#8BD4EF] font-medium">Fourth-Year Student</span>
               </div>
 
               <h1 class="font-display font-medium text-[42px] leading-[1.1] tracking-tight md:text-[76px] mb-8 text-[#F0EFEA]">
                 Pathomporn <br class="hidden md:block">
-                <span class="text-[#9AABC6]">Rakpukdee.</span>
+                <span class="name-starlight">Rakpukdee.</span>
               </h1>
               <p class="text-[#DAC495] text-xl mb-5">ปฐมพร รักภักดี</p>
 
               <p class="text-lg md:text-[20px] text-[#9AABC6] leading-relaxed mb-12 font-light">
-                นักศึกษาวิทยาการคอมพิวเตอร์ชั้นปีที่ 4 มหาวิทยาลัยสวนดุสิต สนใจเปลี่ยนข้อมูลให้เป็นระบบที่นำไปใช้งานได้ ผ่าน Data Pipeline การวิเคราะห์ข้อมูล และการพัฒนาเกม
+                นักศึกษาชั้นปีที่ 4 ที่สนใจเปลี่ยนข้อมูลให้เป็นระบบที่นำไปใช้งานได้ พร้อมเรียนรู้และเปิดรับโอกาสด้าน Data และเทคโนโลยีที่เกี่ยวข้อง
               </p>
 
               <p class="text-sm text-[#9AABC6] mb-8">คาดว่าจะจบปี 2027 <span class="text-[#DAC495] px-2">·</span> GPA 3.21 <span class="text-[#DAC495] px-2">·</span> พื้นที่ทำงานที่สะดวก: กรุงเทพฯ</p>
               <div class="flex flex-wrap gap-4 items-start sm:items-center">
-                <a href="#projects" id="hero-cta-projects" class="inline-flex items-center justify-center px-8 py-4 bg-[#DAC495] text-[#080D19] font-medium text-sm uppercase tracking-widest rounded-sm hover:bg-white transition-colors duration-300">
+                <a href="#projects" id="hero-cta-projects" class="inline-flex items-center justify-center px-8 py-4 bg-[#DAC495] text-[#080D19] font-medium text-sm uppercase tracking-widest rounded-sm hover:bg-[#8BD4EF] transition-colors duration-300">
                   Explore Projects
                 </a>
-                <a href="#resume" id="hero-cta-resume" class="inline-flex items-center justify-center px-6 py-4 border border-[#283346] text-[#F0EFEA] font-medium text-sm tracking-widest rounded-sm hover:border-[#9AABC6] hover:text-[#DAC495] transition-all duration-300 group">
+                <a href="./assets/Pathomporn-Rakpukdee-Resume.pdf" id="hero-cta-resume" target="_blank" class="inline-flex items-center justify-center px-6 py-4 border border-[#283346] text-[#F0EFEA] font-medium text-sm tracking-widest rounded-sm hover:border-[#8BD4EF] hover:text-[#8BD4EF] transition-all duration-300 group bg-[#101827]/50" rel="noopener noreferrer">
                   Resume <iconify-icon icon="ph:file-pdf" class="ml-2 text-lg"></iconify-icon>
                 </a>
               </div>
@@ -191,13 +250,13 @@
 
             <div class="order-1 lg:order-2 flex justify-center lg:justify-end">
               <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] flex items-center justify-center">
-                <!-- Orbital Frame Details -->
-                <div class="absolute inset-0 border border-[#283346] rounded-full opacity-50 animate-[spin_60s_linear_infinite]" style="animation-play-state: running;" data-motion="allow"></div>
-                <div class="absolute inset-4 border border-[#DAC495]/20 rounded-full"></div>
-                <div class="absolute inset-[-10px] md:inset-[-20px] border border-[#283346]/30 rounded-full border-dashed animate-[spin_40s_linear_infinite_reverse]" style="animation-play-state: running;" data-motion="allow"></div>
+                <!-- Asymmetric Celestial Orbits -->
+                <div class="absolute w-[120%] h-[120%] border border-[#8BD4EF]/20 rounded-[40%_60%_70%_30%] animate-spin-slow"></div>
+                <div class="absolute w-[140%] h-[140%] border border-[#DAC495]/10 rounded-[60%_40%_30%_70%] animate-spin-reverse"></div>
+                <div class="absolute inset-4 border border-[#283346] rounded-full border-dashed animate-spin-slow"></div>
 
-                <!-- Portrait Image -->
-                <div class="w-[88%] h-[88%] rounded-full overflow-hidden bg-[#101827] border border-[#283346] relative z-10">
+                <!-- Portrait -->
+                <div class="w-[88%] h-[88%] rounded-full overflow-hidden bg-[#101827] border-2 border-[#8BD4EF]/30 relative z-10 shadow-[0_0_40px_rgba(139,212,239,0.1)]">
                   <img src="./assets/pathomporn.jpg" width="898" height="1662" fetchpriority="high"
                        alt="Portrait of Pathomporn Rakpukdee"
                        class="w-full h-full object-cover scale-[1.12] grayscale-[20%] hover:scale-[1.16] hover:grayscale-0 transition-all duration-700"
@@ -209,168 +268,145 @@
         </div>
       </section>
 
-      <!-- Career Interests Section -->
+      <!-- Career Interests -->
       <section id="interests" class="py-24 md:py-32 relative bg-[#0A101D] border-b border-[#283346]">
-        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px]">
+        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] reveal">
           <div class="mb-16">
             <h2 class="font-display text-3xl md:text-5xl text-[#F0EFEA] mb-4">Career Interests</h2>
-            <p class="text-[#9AABC6] uppercase tracking-widest text-[12px] mb-5">สายงานที่สนใจ</p>
+            <p class="text-[#8BD4EF] uppercase tracking-widest text-[12px] mb-5">สายงานที่สนใจ</p>
             <p class="text-[#F0EFEA] text-lg leading-relaxed max-w-3xl">
               เป้าหมายหลักคือสายงานด้านข้อมูล โดยมีความสนใจเพิ่มเติมในงานออกแบบ เกม การทดสอบซอฟต์แวร์ และงานบริการลูกค้า
             </p>
           </div>
 
           <!-- Filters -->
-          <div class="flex flex-wrap gap-4 mb-12" role="group" aria-label="Filter interests">
-            <button onclick="filterInterests('all')" data-target="all" aria-pressed="true" class="filter-btn px-5 py-3 rounded-full text-[13px] uppercase tracking-wider font-medium bg-[#DAC495] text-[#080D19] transition-colors border border-transparent">
+          <div class="flex flex-wrap gap-4 mb-12">
+            <button onclick="filterInterests('all')" data-target="all" aria-pressed="true" class="filter-btn px-5 py-3 rounded-sm text-[13px] uppercase tracking-wider font-medium bg-[#8BD4EF] text-[#080D19] transition-colors border border-transparent">
               All
             </button>
-            <button onclick="filterInterests('data')" data-target="data" aria-pressed="false" class="filter-btn px-5 py-3 rounded-full text-[13px] uppercase tracking-wider font-medium bg-transparent text-[#9AABC6] border border-[#283346] hover:border-[#9AABC6] hover:text-[#F0EFEA] transition-colors">
+            <button onclick="filterInterests('data')" data-target="data" aria-pressed="false" class="filter-btn px-5 py-3 rounded-sm text-[13px] uppercase tracking-wider font-medium bg-transparent text-[#9AABC6] border border-[#283346] hover:border-[#8BD4EF] hover:text-[#8BD4EF] transition-colors">
               Data
             </button>
-            <button onclick="filterInterests('design-games')" data-target="design-games" aria-pressed="false" class="filter-btn px-5 py-3 rounded-full text-[13px] uppercase tracking-wider font-medium bg-transparent text-[#9AABC6] border border-[#283346] hover:border-[#9AABC6] hover:text-[#F0EFEA] transition-colors">
+            <button onclick="filterInterests('design-games')" data-target="design-games" aria-pressed="false" class="filter-btn px-5 py-3 rounded-sm text-[13px] uppercase tracking-wider font-medium bg-transparent text-[#9AABC6] border border-[#283346] hover:border-[#8BD4EF] hover:text-[#8BD4EF] transition-colors">
               Design & Games
             </button>
-            <button onclick="filterInterests('quality-service')" data-target="quality-service" aria-pressed="false" class="filter-btn px-5 py-3 rounded-full text-[13px] uppercase tracking-wider font-medium bg-transparent text-[#9AABC6] border border-[#283346] hover:border-[#9AABC6] hover:text-[#F0EFEA] transition-colors">
+            <button onclick="filterInterests('quality-service')" data-target="quality-service" aria-pressed="false" class="filter-btn px-5 py-3 rounded-sm text-[13px] uppercase tracking-wider font-medium bg-transparent text-[#9AABC6] border border-[#283346] hover:border-[#8BD4EF] hover:text-[#8BD4EF] transition-colors">
               Quality & Service
             </button>
           </div>
 
-          <!-- Interest Items -->
+          <!-- Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="interests-grid">
-            <div class="interest-item flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-opacity duration-300" data-category="data">
-              <iconify-icon icon="ph:database" class="text-2xl text-[#779CC6]"></iconify-icon>
-              <span class="text-[#F0EFEA] font-medium tracking-wide">Data Engineer <small class="block mt-1 text-[10px] uppercase tracking-[0.18em] text-[#DAC495]">Primary focus</small></span>
+            <div class="interest-item glow-card flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-all duration-300 hover:border-[#8BD4EF]/50" data-category="data">
+              <iconify-icon icon="ph:database" class="text-2xl text-[#8BD4EF] relative z-10"></iconify-icon>
+              <span class="text-[#F0EFEA] font-medium tracking-wide relative z-10">Data Engineer <small class="block mt-1 text-[10px] uppercase tracking-[0.18em] text-[#DAC495]">Primary focus</small></span>
             </div>
-            <div class="interest-item flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-opacity duration-300" data-category="data">
-              <iconify-icon icon="ph:chart-line-up" class="text-2xl text-[#779CC6]"></iconify-icon>
-              <span class="text-[#F0EFEA] font-medium tracking-wide">Data Analyst <small class="block mt-1 text-[10px] uppercase tracking-[0.18em] text-[#DAC495]">Primary focus</small></span>
+            <div class="interest-item glow-card flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-all duration-300 hover:border-[#8BD4EF]/50" data-category="data">
+              <iconify-icon icon="ph:chart-line-up" class="text-2xl text-[#8BD4EF] relative z-10"></iconify-icon>
+              <span class="text-[#F0EFEA] font-medium tracking-wide relative z-10">Data Analyst <small class="block mt-1 text-[10px] uppercase tracking-[0.18em] text-[#DAC495]">Primary focus</small></span>
             </div>
-            <div class="interest-item flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-opacity duration-300" data-category="data">
-              <iconify-icon icon="ph:brain" class="text-2xl text-[#779CC6]"></iconify-icon>
-              <span class="text-[#F0EFEA] font-medium tracking-wide">Data Scientist <small class="block mt-1 text-[10px] uppercase tracking-[0.18em] text-[#DAC495]">Primary focus</small></span>
+            <div class="interest-item glow-card flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-all duration-300 hover:border-[#8BD4EF]/50" data-category="data">
+              <iconify-icon icon="ph:brain" class="text-2xl text-[#8BD4EF] relative z-10"></iconify-icon>
+              <span class="text-[#F0EFEA] font-medium tracking-wide relative z-10">Data Scientist <small class="block mt-1 text-[10px] uppercase tracking-[0.18em] text-[#DAC495]">Primary focus</small></span>
             </div>
-            <div class="interest-item flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-opacity duration-300" data-category="design-games">
-              <iconify-icon icon="ph:bezier-curve" class="text-2xl text-[#DAC495]"></iconify-icon>
-              <span class="text-[#F0EFEA] font-medium tracking-wide">UI/UX Designer</span>
+            <div class="interest-item glow-card flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-all duration-300 hover:border-[#DAC495]/50" data-category="design-games">
+              <iconify-icon icon="ph:bezier-curve" class="text-2xl text-[#DAC495] relative z-10"></iconify-icon>
+              <span class="text-[#F0EFEA] font-medium tracking-wide relative z-10">UI/UX Designer</span>
             </div>
-            <div class="interest-item flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-opacity duration-300" data-category="design-games">
-              <iconify-icon icon="ph:game-controller" class="text-2xl text-[#DAC495]"></iconify-icon>
-              <span class="text-[#F0EFEA] font-medium tracking-wide">Game Developer</span>
+            <div class="interest-item glow-card flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-all duration-300 hover:border-[#DAC495]/50" data-category="design-games">
+              <iconify-icon icon="ph:game-controller" class="text-2xl text-[#DAC495] relative z-10"></iconify-icon>
+              <span class="text-[#F0EFEA] font-medium tracking-wide relative z-10">Game Developer</span>
             </div>
-            <div class="interest-item flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-opacity duration-300" data-category="quality-service">
-              <iconify-icon icon="ph:headset" class="text-2xl text-[#9AABC6]"></iconify-icon>
-              <span class="text-[#F0EFEA] font-medium tracking-wide">Customer Service</span>
+            <div class="interest-item glow-card flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-all duration-300 hover:border-[#9AABC6]/50" data-category="quality-service">
+              <iconify-icon icon="ph:headset" class="text-2xl text-[#9AABC6] relative z-10"></iconify-icon>
+              <span class="text-[#F0EFEA] font-medium tracking-wide relative z-10">Customer Service</span>
             </div>
-            <div class="interest-item flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-opacity duration-300" data-category="quality-service">
-              <iconify-icon icon="ph:bug" class="text-2xl text-[#9AABC6]"></iconify-icon>
-              <span class="text-[#F0EFEA] font-medium tracking-wide">Software Tester</span>
+            <div class="interest-item glow-card flex items-center gap-4 p-6 bg-[#101827] border border-[#283346] rounded-sm transition-all duration-300 hover:border-[#9AABC6]/50" data-category="quality-service">
+              <iconify-icon icon="ph:bug" class="text-2xl text-[#9AABC6] relative z-10"></iconify-icon>
+              <span class="text-[#F0EFEA] font-medium tracking-wide relative z-10">Software Tester</span>
             </div>
           </div>
-
           <div class="mt-12 text-[#9AABC6] text-[15px] font-light italic text-center">
             เปิดรับโอกาสในสายงานอื่นที่เกี่ยวข้อง และพร้อมเรียนรู้ทักษะใหม่
           </div>
         </div>
       </section>
 
-      <!-- Projects Section -->
+      <!-- Selected Work -->
       <section id="projects" class="py-24 md:py-32 relative">
         <div class="max-w-[1160px] mx-auto px-6 md:px-[56px]">
-          <div class="mb-16 md:mb-24 flex items-end justify-between">
-            <div>
-              <h2 class="font-display text-3xl md:text-5xl text-[#F0EFEA] mb-4">Selected Work</h2>
-              <p class="text-[#9AABC6] uppercase tracking-widest text-[12px]">ผลงานที่โดดเด่น</p>
-            </div>
+          <div class="mb-16 md:mb-24 reveal">
+            <h2 class="font-display text-3xl md:text-5xl text-[#F0EFEA] mb-4">Selected Work</h2>
+            <p class="text-[#8BD4EF] uppercase tracking-widest text-[12px]">ผลงานที่โดดเด่น</p>
           </div>
 
           <div class="space-y-32 md:space-y-48">
 
-            <!-- Project 1: Data Pipeline -->
-            <article class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <!-- ETL Project -->
+            <article class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center reveal">
               <div class="lg:col-span-5 order-2 lg:order-1">
-                <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#101827] border border-[#283346] rounded-full mb-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#101827] border border-[#283346] rounded-sm mb-6">
                   <span class="w-2 h-2 rounded-full bg-[#DAC495]"></span>
                   <span class="text-[11px] uppercase tracking-widest text-[#9AABC6]">Prototype</span>
                 </div>
-
                 <h3 class="font-display text-2xl md:text-4xl text-[#F0EFEA] mb-6">GoogleForm Medallion ETL</h3>
-
                 <p class="text-[#9AABC6] text-[17px] leading-relaxed mb-6 font-light">
                   ต้นแบบ Data Pipeline แบบครบวงจรสำหรับจัดการข้อมูลแบบสอบถามของมหาวิทยาลัย ใช้สถาปัตยกรรม Medallion
                 </p>
-                <div class="border-l-2 border-[#DAC495] pl-4 mb-6">
-                  <p class="text-[11px] tracking-widest uppercase text-[#DAC495] mb-2">My contribution · พัฒนาทุกขั้นตอน</p>
-                  <p class="text-[#9AABC6] text-[15px] leading-relaxed">ออกแบบและพัฒนา ETL ตั้งแต่รับ CSV ทำความสะอาดข้อมูล จนถึงสรุปผลใน PostgreSQL พร้อมจัดสภาพแวดล้อมด้วย Docker Compose และกำหนดลำดับงานผ่าน Apache Airflow</p>
-                </div>
-
-                <details class="mb-8 group border border-[#283346] rounded-sm overflow-hidden">
-                  <summary class="cursor-pointer p-4 bg-[#101827] flex items-center justify-between text-[#F0EFEA] text-[15px] hover:bg-[#283346]/40 transition-colors">
-                    <span>รายละเอียด Pipeline Layers</span>
-                    <iconify-icon icon="ph:caret-down" class="text-[#9AABC6] group-open:rotate-180 transition-transform"></iconify-icon>
-                  </summary>
-                  <div class="p-4 bg-[#080D19] text-[#9AABC6] text-[14px] leading-relaxed space-y-3 border-t border-[#283346]">
-                    <p><strong class="text-[#F0EFEA]">Bronze:</strong> นำเข้าข้อมูลดิบ (Raw CSV) เข้าสู่ PostgreSQL</p>
-                    <p><strong class="text-[#F0EFEA]">Silver:</strong> ทำความสะอาดข้อความ และจัดการข้อมูลซ้ำซ้อนผ่านกระบวนการ Batch Processing</p>
-                    <p><strong class="text-[#F0EFEA]">Gold:</strong> สรุปยอดจำนวนการตอบกลับและความพึงพอใจแยกตามคณะ สำหรับเตรียมจัดทำรายงาน</p>
-                    <p><strong class="text-[#F0EFEA]">Target:</strong> Power BI สำหรับแสดงผลการวิเคราะห์ข้อมูล</p>
-                    <p><strong class="text-[#F0EFEA]">Orchestration:</strong> ใช้ DAG แบบ Bronze → Silver → Gold กับ DockerOperator ใน Apache Airflow 2.10.5</p>
-                    <p><strong class="text-[#F0EFEA]">สิ่งที่ได้ฝึก:</strong> การจัดการข้อมูลที่ขาดหาย ข้อมูลซ้ำ การโหลดเป็นชุด และการแก้ปัญหาสภาพแวดล้อม Compose / Airflow ให้รันซ้ำได้</p>
-                  </div>
-                </details>
-
-                <div class="flex flex-wrap gap-2 mb-10">
+                <div class="flex flex-wrap gap-2 mb-8">
                   <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">Python 3</span>
-                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">Pandas</span>
-                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">SQLAlchemy</span>
-                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">PostgreSQL 15</span>
-                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">Docker Compose</span>
-                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">Apache Airflow</span>
+                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">PostgreSQL</span>
+                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">Airflow</span>
                 </div>
-
-                <a href="https://github.com/BrefGhost/GoogleForm-Medallion-ETL" id="proj-1-link" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 text-[#DAC495] hover:text-white transition-colors group text-[14px] uppercase tracking-widest font-medium">
-                  View repository
-                  <iconify-icon icon="ph:arrow-right" class="group-hover:translate-x-1 transition-transform"></iconify-icon>
-                </a>
+                <div class="flex flex-wrap gap-4">
+                  <button id="etl-details-button" onclick="openProject('etl-dialog', this)" class="inline-flex items-center justify-center px-5 py-3 bg-[#101827] border border-[#8BD4EF]/50 text-[#F0EFEA] text-sm rounded-sm hover:bg-[#8BD4EF] hover:text-[#080D19] transition-colors">
+                    เปิดรายละเอียดผลงาน
+                  </button>
+                  <a id="preview-link-6" href="https://github.com/BrefGhost/GoogleForm-Medallion-ETL" target="_blank" class="inline-flex items-center justify-center px-5 py-3 border border-[#283346] text-[#DAC495] text-sm uppercase tracking-widest rounded-sm hover:border-[#DAC495] transition-colors" rel="noopener noreferrer">
+                    Repository <iconify-icon icon="ph:arrow-right" class="ml-2"></iconify-icon>
+                  </a>
+                </div>
               </div>
 
               <div class="lg:col-span-7 order-1 lg:order-2">
-                <figure class="m-0">
+                <figure class="m-0 glow-card rounded-lg">
                   <div class="bg-[#101827] border border-[#283346] rounded-lg p-8 md:p-12 aspect-[4/3] flex flex-col items-center justify-center relative overflow-hidden">
-                    <!-- Decorative grid bg -->
                     <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(var(--color-text-secondary) 1px, transparent 1px); background-size: 24px 24px;"></div>
-
-                    <!-- Diagram -->
                     <div class="relative z-10 w-full max-w-md space-y-8">
                       <div class="flex items-center justify-center">
-                        <div class="px-4 py-2 border border-[#283346] text-[#9AABC6] text-sm bg-[#080D19] rounded-sm">Raw CSV</div>
+                        <div class="px-4 py-2 border border-[#283346] text-[#9AABC6] text-sm bg-[#080D19] rounded-sm z-10">Raw CSV</div>
                       </div>
-                      <div class="flex justify-center">
-                        <iconify-icon icon="ph:arrow-down" class="text-[#283346] text-xl"></iconify-icon>
+                      <div class="flex justify-center relative">
+                         <div class="absolute w-[1px] h-[50px] bg-gradient-to-b from-transparent via-[#8BD4EF] to-transparent animate-flow top-[-10px]"></div>
+                         <iconify-icon icon="ph:arrow-down" class="text-[#283346] text-xl relative z-10 bg-[#101827]"></iconify-icon>
                       </div>
-                      <div class="flex justify-between items-center bg-[#080D19] border border-[#283346] p-4 rounded-sm">
+                      <div class="flex justify-between items-center bg-[#080D19] border border-[#283346] p-4 rounded-sm shadow-[0_0_15px_rgba(139,212,239,0.05)]">
                         <div class="flex flex-col items-center">
                           <iconify-icon icon="ph:database" class="text-[#cd7f32] text-2xl mb-2"></iconify-icon>
                           <span class="text-[11px] uppercase tracking-wider text-[#9AABC6]">Bronze</span>
                         </div>
-                        <iconify-icon icon="ph:arrow-right" class="text-[#283346]"></iconify-icon>
+                        <div class="w-8 h-[1px] bg-[#283346] relative overflow-hidden">
+                           <div class="absolute top-0 left-0 w-full h-full bg-[#8BD4EF] animate-pulse" style="animation: pulse-flow 2s infinite;"></div>
+                        </div>
                         <div class="flex flex-col items-center">
                           <iconify-icon icon="ph:database" class="text-[#c0c0c0] text-2xl mb-2"></iconify-icon>
                           <span class="text-[11px] uppercase tracking-wider text-[#9AABC6]">Silver</span>
                         </div>
-                        <iconify-icon icon="ph:arrow-right" class="text-[#283346]"></iconify-icon>
+                        <div class="w-8 h-[1px] bg-[#283346] relative overflow-hidden">
+                           <div class="absolute top-0 left-0 w-full h-full bg-[#DAC495] animate-pulse" style="animation: pulse-flow 2s infinite 0.5s;"></div>
+                        </div>
                         <div class="flex flex-col items-center">
                           <iconify-icon icon="ph:database" class="text-[#ffd700] text-2xl mb-2"></iconify-icon>
                           <span class="text-[11px] uppercase tracking-wider text-[#9AABC6]">Gold</span>
                         </div>
                       </div>
-                      <div class="flex justify-center">
-                        <iconify-icon icon="ph:arrow-down" class="text-[#283346] text-xl"></iconify-icon>
+                      <div class="flex justify-center relative">
+                         <div class="absolute w-[1px] h-[50px] bg-gradient-to-b from-transparent via-[#DAC495] to-transparent animate-flow top-[-10px]" style="animation-delay: 1s;"></div>
+                         <iconify-icon icon="ph:arrow-down" class="text-[#283346] text-xl relative z-10 bg-[#101827]"></iconify-icon>
                       </div>
                       <div class="flex items-center justify-center">
-                        <div class="px-4 py-2 border border-[#283346] text-[#779CC6] text-sm bg-[#080D19] rounded-sm flex items-center gap-2">
-                          <iconify-icon icon="ph:chart-bar"></iconify-icon>
-                          Power BI Target
+                        <div class="px-4 py-2 border border-[#DAC495]/30 text-[#DAC495] text-sm bg-[#080D19] rounded-sm flex items-center gap-2 z-10 shadow-[0_0_15px_rgba(218,196,149,0.1)]">
+                          <iconify-icon icon="ph:chart-bar"></iconify-icon> Power BI Target
                         </div>
                       </div>
                     </div>
@@ -380,160 +416,175 @@
               </div>
             </article>
 
-            <!-- Project 2: Unity Game -->
-            <article class="border-t border-[#283346] pt-12 md:pt-16">
+            <!-- ETL Dialog -->
+            <dialog id="etl-dialog" aria-labelledby="etl-dialog-title" class="rounded-lg">
+              <div class="p-6 md:p-8 relative bg-[#101827]">
+                <button onclick="document.getElementById('etl-dialog').close()" class="absolute top-3 right-3 text-[#9AABC6] hover:text-[#F0EFEA] p-3" aria-label="ปิดรายละเอียดผลงาน">
+                   <iconify-icon icon="ph:x" class="text-xl"></iconify-icon>
+                </button>
+                <h3 id="etl-dialog-title" class="font-display text-2xl text-[#F0EFEA] mb-2 pr-10">GoogleForm Medallion ETL</h3>
+                <p class="text-[11px] tracking-widest uppercase text-[#8BD4EF] mb-6 border-b border-[#283346] pb-4">My contribution · พัฒนาทุกขั้นตอน</p>
+                <p class="text-[#9AABC6] text-[15px] leading-relaxed mb-6">ออกแบบและพัฒนา ETL ตั้งแต่รับ CSV ทำความสะอาดข้อมูล จนถึงสรุปผลใน PostgreSQL พร้อมจัดสภาพแวดล้อมด้วย Docker Compose และกำหนดลำดับงานผ่าน Apache Airflow</p>
+
+                <div class="bg-[#080D19] border border-[#283346] p-5 rounded-sm space-y-4 text-[14px] text-[#9AABC6]">
+                  <p><strong class="text-[#F0EFEA]">Bronze:</strong> นำเข้าข้อมูลดิบ (Raw CSV) เข้าสู่ PostgreSQL</p>
+                  <p><strong class="text-[#F0EFEA]">Silver:</strong> ทำความสะอาดข้อความ และจัดการข้อมูลซ้ำซ้อนผ่านกระบวนการ Batch Processing</p>
+                  <p><strong class="text-[#F0EFEA]">Gold:</strong> สรุปยอดจำนวนการตอบกลับและความพึงพอใจแยกตามคณะ สำหรับเตรียมจัดทำรายงาน</p>
+                  <p><strong class="text-[#F0EFEA]">Target:</strong> Power BI สำหรับแสดงผลการวิเคราะห์ข้อมูล</p>
+                  <p><strong class="text-[#F0EFEA]">Orchestration:</strong> ใช้ DAG แบบ Bronze → Silver → Gold กับ DockerOperator ใน Apache Airflow 2.10.5</p>
+                  <p><strong class="text-[#8BD4EF]">สิ่งที่ได้ฝึก:</strong> การจัดการข้อมูลที่ขาดหาย ข้อมูลซ้ำ การโหลดเป็นชุด และการแก้ปัญหาสภาพแวดล้อม Compose / Airflow ให้รันซ้ำได้</p>
+                </div>
+              </div>
+            </dialog>
+
+            <!-- Game Project -->
+            <article class="border-t border-[#283346] pt-12 md:pt-16 reveal">
               <div class="max-w-3xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#101827] border border-[#283346] rounded-full mb-6">
-                  <span class="w-2 h-2 rounded-full bg-[#779CC6]"></span>
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#101827] border border-[#283346] rounded-sm mb-6">
+                  <span class="w-2 h-2 rounded-full bg-[#8BD4EF]"></span>
                   <span class="text-[11px] uppercase tracking-widest text-[#9AABC6]">Senior Project</span>
                 </div>
-
                 <h3 class="font-display text-2xl md:text-4xl text-[#F0EFEA] mb-6">Moon Valley Farm</h3>
-
                 <p class="text-[#9AABC6] text-[17px] leading-relaxed mb-6 font-light">
                   เกมแนวทำฟาร์มและทำอาหาร พัฒนาด้วย Unity เป็นโปรเจกต์จบการศึกษา ดาวน์โหลดตัวเกมผ่าน GitHub Releases ได้ โดยซอร์สโค้ดยังคงเป็นแบบส่วนตัว (Private)
                 </p>
-                <div class="border-l-2 border-[#779CC6] pl-4 mb-6">
-                  <p class="text-[11px] tracking-widest uppercase text-[#779CC6] mb-2">My contribution · Solo project</p>
-                  <p class="text-[#9AABC6] text-[15px] leading-relaxed">พัฒนาตัวเกมและจัดทำเล่มด้วยตัวเอง รับผิดชอบการเชื่อมต่อฐานข้อมูล ทดสอบโมเดล Recommendation ทำแอนิเมชัน จัดฉากและขอบเขตฉาก รวมถึงระบบ Interact ภายในเกม</p>
-                </div>
-
-                <details class="mb-8 group border border-[#283346] rounded-sm overflow-hidden">
-                  <summary class="cursor-pointer p-4 bg-[#101827] flex items-center justify-between text-[#F0EFEA] text-[15px] hover:bg-[#283346]/40 transition-colors">
-                    <span>รายละเอียดการดาวน์โหลด</span>
-                    <iconify-icon icon="ph:caret-down" class="text-[#9AABC6] group-open:rotate-180 transition-transform"></iconify-icon>
-                  </summary>
-                  <div class="p-4 bg-[#080D19] text-[#9AABC6] text-[14px] leading-relaxed space-y-3 border-t border-[#283346]">
-                    <p>มีไฟล์ติดตั้ง (Build) พร้อมให้ดาวน์โหลดในหน้า Releases สำหรับแพลตฟอร์ม:</p>
-                    <ul class="list-disc pl-5 space-y-1">
-                      <li>Windows 64-bit</li>
-                      <li>Linux x86_64</li>
-                    </ul>
-                  </div>
-                </details>
-
-                <div class="flex flex-wrap gap-2 mb-10">
-                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm flex items-center gap-2">
-                    <iconify-icon icon="ph:windows-logo"></iconify-icon> Windows 64-bit
-                  </span>
-                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm flex items-center gap-2">
-                    <iconify-icon icon="ph:linux-logo"></iconify-icon> Linux x86_64
-                  </span>
+                <div class="flex flex-wrap gap-2 mb-8">
                   <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm">Unity</span>
+                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm flex items-center gap-1"><iconify-icon icon="ph:windows-logo"></iconify-icon> Windows</span>
+                  <span class="text-[12px] px-3 py-1.5 border border-[#283346] text-[#9AABC6] rounded-sm flex items-center gap-1"><iconify-icon icon="ph:linux-logo"></iconify-icon> Linux</span>
                 </div>
 
-                <a href="https://github.com/BrefGhost/MoonValleyFarm-Releases/releases/latest" id="proj-2-link" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 text-[#DAC495] hover:text-white transition-colors group text-[14px] uppercase tracking-widest font-medium">
-                  Explore the game
-                  <iconify-icon icon="ph:download-simple" class="group-hover:translate-y-1 transition-transform"></iconify-icon>
-                </a>
+                <div class="flex flex-wrap gap-4">
+                  <button id="game-details-button" onclick="openProject('game-dialog', this)" class="inline-flex items-center justify-center px-5 py-3 bg-[#101827] border border-[#8BD4EF]/50 text-[#F0EFEA] text-sm rounded-sm hover:bg-[#8BD4EF] hover:text-[#080D19] transition-colors">
+                    เปิดรายละเอียดผลงาน
+                  </button>
+                  <a id="preview-link-7" href="https://github.com/BrefGhost/MoonValleyFarm-Releases/releases/latest" target="_blank" class="inline-flex items-center justify-center px-5 py-3 border border-[#283346] text-[#DAC495] text-sm uppercase tracking-widest rounded-sm hover:border-[#DAC495] transition-colors" rel="noopener noreferrer">
+                    Explore Game <iconify-icon icon="ph:download-simple" class="ml-2"></iconify-icon>
+                  </a>
+                </div>
               </div>
             </article>
 
+            <!-- Game Dialog -->
+            <dialog id="game-dialog" aria-labelledby="game-dialog-title" class="rounded-lg">
+              <div class="p-6 md:p-8 relative bg-[#101827]">
+                <button onclick="document.getElementById('game-dialog').close()" class="absolute top-3 right-3 text-[#9AABC6] hover:text-[#F0EFEA] p-3" aria-label="ปิดรายละเอียดผลงาน">
+                   <iconify-icon icon="ph:x" class="text-xl"></iconify-icon>
+                </button>
+                <h3 id="game-dialog-title" class="font-display text-2xl text-[#F0EFEA] mb-2 pr-10">Moon Valley Farm</h3>
+                <p class="text-[11px] tracking-widest uppercase text-[#8BD4EF] mb-6 border-b border-[#283346] pb-4">My contribution · Solo project</p>
+                <p class="text-[#9AABC6] text-[15px] leading-relaxed mb-6">พัฒนาตัวเกมและจัดทำเล่มด้วยตัวเอง รับผิดชอบการเชื่อมต่อฐานข้อมูล ทดสอบโมเดล Recommendation ทำแอนิเมชัน จัดฉากและขอบเขตฉาก รวมถึงระบบ Interact ภายในเกม</p>
+
+                <div class="bg-[#080D19] border border-[#283346] p-5 rounded-sm space-y-3 text-[14px] text-[#9AABC6]">
+                  <p class="text-[#F0EFEA]">มีไฟล์ติดตั้ง (Build) พร้อมให้ดาวน์โหลดในหน้า Releases สำหรับแพลตฟอร์ม:</p>
+                  <ul class="list-disc pl-5 space-y-2">
+                    <li>Windows 64-bit</li>
+                    <li>Linux x86_64</li>
+                  </ul>
+                </div>
+              </div>
+            </dialog>
+
           </div>
         </div>
       </section>
 
-      <!-- About Section -->
+      <!-- About & Education -->
       <section id="about" class="py-24 md:py-32 border-t border-[#283346] bg-[#0A101D]">
-        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px]">
-          <div class="max-w-3xl">
+        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] reveal">
+          <div class="max-w-3xl mb-24">
             <h2 class="font-display text-3xl md:text-5xl text-[#F0EFEA] mb-8">About</h2>
             <div class="space-y-6 text-[#9AABC6] text-[17px] leading-relaxed font-light">
-              <p>
-                ผมชื่อ ปฐมพร รักภักดี (Pathomporn Rakpukdee) เป็นนักศึกษาวิทยาการคอมพิวเตอร์ชั้นปีที่ 4 มหาวิทยาลัยสวนดุสิต คาดว่าจะจบปี 2027 สนใจงานด้านข้อมูล ตั้งแต่การเตรียมข้อมูลให้พร้อมใช้งาน ไปจนถึงการวิเคราะห์และนำเสนอผล
-              </p>
-              <p>
-                ผลงานที่นำมาแสดงมีทั้งต้นแบบ Data Pipeline ด้วยสถาปัตยกรรม Medallion โดยใช้ Python และ PostgreSQL และเกมทำฟาร์มและทำอาหารบน Unity ซึ่งเป็นโปรเจกต์จบการศึกษา
-              </p>
+              <p>ผมชื่อ ปฐมพร รักภักดี (Pathomporn Rakpukdee) เป็นนักศึกษาวิทยาการคอมพิวเตอร์ชั้นปีที่ 4 มหาวิทยาลัยสวนดุสิต คาดว่าจะจบปี 2027 สนใจงานด้านข้อมูล ตั้งแต่การเตรียมข้อมูลให้พร้อมใช้งาน ไปจนถึงการวิเคราะห์และนำเสนอผล</p>
+              <p>ผลงานที่นำมาแสดงมีทั้งต้นแบบ Data Pipeline ด้วยสถาปัตยกรรม Medallion โดยใช้ Python และ PostgreSQL และเกมทำฟาร์มและทำอาหารบน Unity ซึ่งเป็นโปรเจกต์จบการศึกษา</p>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-10 pt-16 border-t border-[#283346]">
+            <div>
+              <p class="text-[#8BD4EF] tracking-[0.2em] uppercase text-xs mb-4">Learning trajectory</p>
+              <h2 class="font-display text-3xl md:text-4xl mb-5 text-[#F0EFEA]">Education</h2>
+              <p class="text-[#9AABC6] leading-relaxed">เส้นทางการเรียนรู้และพื้นฐานที่นำมาใช้ในโปรเจกต์</p>
+            </div>
+            <div class="border-l border-[#8BD4EF]/50 pl-6">
+              <h3 class="text-xl mb-2 text-[#F0EFEA]">มหาวิทยาลัยสวนดุสิต</h3>
+              <p class="text-[#9AABC6] leading-relaxed">วิทยาการคอมพิวเตอร์ · ปริญญาตรี (กำลังศึกษา)</p>
+              <div class="flex flex-wrap gap-3 mt-5 mb-5 text-sm">
+                <span class="px-3 py-2 bg-[#101827] border border-[#283346] rounded-sm text-[#F0EFEA]">คาดว่าจะจบ 2027</span>
+                <span class="px-3 py-2 bg-[#101827] border border-[#283346] rounded-sm text-[#F0EFEA]">GPA 3.21 / 4.00</span>
+              </div>
+              <p class="text-[#9AABC6] text-sm leading-relaxed">รายวิชาที่เกี่ยวข้อง: ระบบจัดการฐานข้อมูล โครงสร้างข้อมูลและอัลกอริทึม วิศวกรรมซอฟต์แวร์ เครือข่ายคอมพิวเตอร์ และพื้นฐาน Big Data</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="education" class="py-20 md:py-24 border-t border-[#283346]">
-        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] grid md:grid-cols-2 gap-10">
-          <div>
-            <p class="text-[#DAC495] tracking-[0.2em] uppercase text-xs mb-4">Learning trajectory</p>
-            <h2 class="font-display text-3xl md:text-4xl mb-5">Education</h2>
-            <p class="text-[#9AABC6] leading-relaxed">เส้นทางการเรียนรู้และพื้นฐานที่นำมาใช้ในโปรเจกต์</p>
-          </div>
-          <div class="border-l border-[#DAC495] pl-6">
-            <h3 class="text-xl mb-2">มหาวิทยาลัยสวนดุสิต</h3>
-            <p class="text-[#9AABC6] leading-relaxed">วิทยาการคอมพิวเตอร์ · ปริญญาตรี (กำลังศึกษา)</p>
-            <div class="flex flex-wrap gap-3 mt-5 mb-5 text-sm">
-              <span class="px-3 py-2 bg-[#101827] border border-[#283346] rounded-sm">คาดว่าจะจบ 2027</span>
-              <span class="px-3 py-2 bg-[#101827] border border-[#283346] rounded-sm">GPA 3.21 / 4.00</span>
-            </div>
-            <p class="text-[#9AABC6] text-sm leading-relaxed">รายวิชาที่เกี่ยวข้อง: ระบบจัดการฐานข้อมูล โครงสร้างข้อมูลและอัลกอริทึม วิศวกรรมซอฟต์แวร์ เครือข่ายคอมพิวเตอร์ และพื้นฐาน Big Data</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="skills" class="py-20 md:py-24 border-t border-[#283346] bg-[#0A101D]">
-        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px]">
-          <h2 class="font-display text-3xl md:text-4xl mb-4">Skills &amp; Tools</h2>
+      <!-- Skills -->
+      <section id="skills" class="py-20 md:py-24 border-t border-[#283346]">
+        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] reveal">
+          <h2 class="font-display text-3xl md:text-4xl mb-4 text-[#F0EFEA]">Skills &amp; Tools</h2>
           <p class="text-[#9AABC6] mb-10">ทักษะและเครื่องมือที่เคยใช้งานผ่านการเรียนและโปรเจกต์</p>
           <div class="grid md:grid-cols-2 gap-5">
-            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm">
-              <h3 class="font-display text-xl text-[#DAC495] mb-4">Data &amp; Engineering</h3>
-              <p class="text-[#F0EFEA] leading-loose">Python · Pandas · SQLAlchemy · SQL · PostgreSQL · SQLite · Docker · Docker Compose · Apache Airflow</p>
-              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed">ETL / Medallion Architecture · Batch Loading · Workflow Orchestration</p>
+            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm glow-card">
+              <h3 class="font-display text-xl text-[#8BD4EF] mb-4 relative z-10">Data &amp; Engineering</h3>
+              <p class="text-[#F0EFEA] leading-loose relative z-10">Python · Pandas · SQLAlchemy · SQL · PostgreSQL · SQLite · Docker · Docker Compose · Apache Airflow</p>
+              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed relative z-10">ETL / Medallion Architecture · Batch Loading · Workflow Orchestration</p>
             </article>
-            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm">
-              <h3 class="font-display text-xl text-[#DAC495] mb-4">Reporting &amp; Visualization</h3>
-              <p class="text-[#F0EFEA] leading-loose">Microsoft Power BI · Tableau · Microsoft Excel</p>
-              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed">การเตรียมข้อมูลและการนำเสนอข้อมูล</p>
+            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm glow-card">
+              <h3 class="font-display text-xl text-[#DAC495] mb-4 relative z-10">Reporting &amp; Visualization</h3>
+              <p class="text-[#F0EFEA] leading-loose relative z-10">Microsoft Power BI · Tableau · Microsoft Excel</p>
+              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed relative z-10">การเตรียมข้อมูลและการนำเสนอข้อมูล</p>
             </article>
-            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm">
-              <h3 class="font-display text-xl text-[#DAC495] mb-4">Game &amp; Creative Tools</h3>
-              <p class="text-[#F0EFEA] leading-loose">Unity · Blender</p>
-              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed">แอนิเมชัน · จัดฉาก · ระบบ Interact · เชื่อมต่อฐานข้อมูล · ทดสอบ Recommendation</p>
+            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm glow-card">
+              <h3 class="font-display text-xl text-[#DAC495] mb-4 relative z-10">Game &amp; Creative Tools</h3>
+              <p class="text-[#F0EFEA] leading-loose relative z-10">Unity · Blender</p>
+              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed relative z-10">แอนิเมชัน · จัดฉาก · ระบบ Interact · เชื่อมต่อฐานข้อมูล · ทดสอบ Recommendation</p>
             </article>
-            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm">
-              <h3 class="font-display text-xl text-[#DAC495] mb-4">Development &amp; Everyday Tools</h3>
-              <p class="text-[#F0EFEA] leading-loose">Visual Studio Code · Git · GitHub · Linux · Microsoft Word</p>
-              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed">ภาษาอังกฤษ: อ่านและเขียนได้</p>
+            <article class="bg-[#101827] border border-[#283346] p-6 rounded-sm glow-card">
+              <h3 class="font-display text-xl text-[#8BD4EF] mb-4 relative z-10">Development &amp; Everyday Tools</h3>
+              <p class="text-[#F0EFEA] leading-loose relative z-10">Visual Studio Code · Git · GitHub · Linux · Microsoft Word</p>
+              <p class="text-sm text-[#9AABC6] mt-4 leading-relaxed relative z-10">ภาษาอังกฤษ: อ่านและเขียนได้</p>
             </article>
           </div>
-          <details class="mt-6 border border-[#283346] rounded-sm">
-            <summary class="cursor-pointer p-5 text-[#9AABC6]">ความรู้พื้นฐานเพิ่มเติม <span aria-hidden="true">+</span></summary>
-            <p class="px-5 pb-5 text-[#9AABC6] leading-relaxed">สถาปัตยกรรม Apache Spark และ Hadoop · MongoDB / NoSQL · DuckDB</p>
-          </details>
+          <div class="mt-6 border border-[#283346] rounded-sm p-5 bg-[#101827]">
+             <p class="text-[#9AABC6] text-sm"><span class="text-[#F0EFEA]">ความรู้พื้นฐานเพิ่มเติม:</span> สถาปัตยกรรม Apache Spark และ Hadoop · MongoDB / NoSQL · DuckDB</p>
+          </div>
         </div>
       </section>
 
-      <section id="contact" class="py-20 md:py-24 border-t border-[#283346]">
-        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] grid md:grid-cols-2 gap-12">
+      <!-- Contact -->
+      <section id="contact" class="py-20 md:py-24 border-t border-[#283346] bg-[#0A101D]">
+        <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] grid md:grid-cols-2 gap-12 reveal">
           <div>
             <p class="text-[#DAC495] tracking-[0.2em] uppercase text-xs mb-4">Make contact</p>
-            <h2 class="font-display text-3xl md:text-4xl mb-6">Let's connect.</h2>
+            <h2 class="font-display text-3xl md:text-4xl mb-6 text-[#F0EFEA]">Let's connect.</h2>
             <p class="text-[#9AABC6] leading-relaxed mb-8">สนใจโอกาสด้าน Data และเทคโนโลยีที่เกี่ยวข้อง พร้อมพูดคุยเกี่ยวกับผลงานและการเรียนรู้สิ่งใหม่ ๆ</p>
             <div class="space-y-4 text-sm">
-              <a id="contact-email" href="mailto:br9f.gh0stpptm2457@gmail.com" class="block text-[#F0EFEA] break-all hover:text-[#DAC495] py-2">br9f.gh0stpptm2457@gmail.com <span aria-hidden="true">↗</span></a>
-              <a id="contact-phone" href="tel:+66810343474" class="block text-[#F0EFEA] hover:text-[#DAC495] py-2">081 034 3474 <span aria-hidden="true">↗</span></a>
+              <a id="contact-email" href="mailto:br9f.gh0stpptm2457@gmail.com" class="block text-[#F0EFEA] break-all hover:text-[#8BD4EF] py-2 transition-colors">br9f.gh0stpptm2457@gmail.com <span aria-hidden="true">↗</span></a>
+              <a id="contact-phone" href="tel:+66810343474" class="block text-[#F0EFEA] hover:text-[#8BD4EF] py-2 transition-colors">081 034 3474 <span aria-hidden="true">↗</span></a>
               <p class="text-[#9AABC6]">พื้นที่ที่สะดวกทำงาน: กรุงเทพฯ</p>
             </div>
           </div>
-          <div id="resume" class="bg-[#101827] border border-[#283346] rounded-sm p-7 md:p-8 self-start">
-            <iconify-icon icon="ph:file-pdf" class="text-3xl text-[#DAC495] mb-5"></iconify-icon>
-            <h3 class="font-display text-2xl mb-4">A little more about me.</h3>
-            <p class="text-[#9AABC6] leading-relaxed mb-6">อ่านประวัติการศึกษา ทักษะด้านข้อมูล และรายละเอียดการพัฒนา ETL ในเรซูเม่ภาษาอังกฤษฉบับเต็ม</p>
-            <a id="resume-download" href="./assets/Pathomporn-Rakpukdee-Resume.pdf" download="Pathomporn-Rakpukdee-Resume.pdf" class="inline-flex items-center gap-3 px-6 py-4 bg-[#DAC495] text-[#080D19] font-medium text-sm rounded-sm">ดาวน์โหลด Resume <iconify-icon icon="ph:download-simple"></iconify-icon></a>
-            <p class="text-xs text-[#9AABC6] mt-4">PDF · 1 หน้า · ภาษาอังกฤษ</p>
+          <div id="resume" class="bg-[#101827] border border-[#283346] rounded-sm p-7 md:p-8 self-start relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-[#8BD4EF]/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110"></div>
+            <iconify-icon icon="ph:file-pdf" class="text-3xl text-[#8BD4EF] mb-5 relative z-10"></iconify-icon>
+            <h3 class="font-display text-2xl mb-4 text-[#F0EFEA] relative z-10">A little more about me.</h3>
+            <p class="text-[#9AABC6] leading-relaxed mb-6 relative z-10">อ่านประวัติการศึกษา ทักษะด้านข้อมูล และรายละเอียดการพัฒนา ETL ในเรซูเม่ภาษาอังกฤษฉบับเต็ม</p>
+            <a id="resume-download" href="./assets/Pathomporn-Rakpukdee-Resume.pdf" download="Pathomporn-Rakpukdee-Resume.pdf" class="inline-flex items-center gap-3 px-6 py-4 bg-[#8BD4EF] text-[#080D19] font-medium text-sm rounded-sm hover:bg-[#F0EFEA] transition-colors relative z-10">ดาวน์โหลด Resume <iconify-icon icon="ph:download-simple"></iconify-icon></a>
+            <p class="text-xs text-[#9AABC6] mt-4 relative z-10">PDF · 1 หน้า · ภาษาอังกฤษ</p>
           </div>
         </div>
       </section>
 
     </main>
 
-    <!-- Footer / Contact -->
+    <!-- Footer -->
     <footer class="border-t border-[#283346] py-12 md:py-16 bg-[#080D19] relative z-10">
       <div class="max-w-[1160px] mx-auto px-6 md:px-[56px] flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
         <div>
           <p class="font-display text-[#F0EFEA] text-lg mb-2">Pathomporn Rakpukdee</p>
           <p class="text-[#9AABC6] text-sm">ปฐมพร รักภักดี · Student &amp; Developer</p>
         </div>
-
         <div class="flex items-center gap-6">
           <a href="https://github.com/BrefGhost" id="footer-github" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[#9AABC6] hover:text-[#DAC495] transition-colors text-sm uppercase tracking-widest font-medium">
             <iconify-icon icon="ph:github-logo" class="text-xl"></iconify-icon>
@@ -546,52 +597,272 @@
   </div>
 
   <script>
-    // Interactive Filter Logic for Career Interests
+    // Remove no-js class
+    document.body.classList.remove('no-js');
+
+    // Motion Toggle
+    const motionToggle = document.getElementById('motion-toggle');
+    const mobileMotionToggle = document.getElementById('mobile-motion-toggle');
+    const motionIcons = document.querySelectorAll('#motion-icon, #mobile-motion-toggle iconify-icon');
+
+    // Check prefers-reduced-motion
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const prefersReducedMotion = motionPreference.matches;
+    let motionEnabled = !prefersReducedMotion;
+
+    function updateMotionState() {
+      document.documentElement.classList.toggle('motion-paused', !motionEnabled);
+      document.querySelectorAll('[data-motion-label]').forEach(label => label.textContent = motionEnabled ? 'Motion on' : 'Motion off');
+      [motionToggle, mobileMotionToggle].forEach(button => {
+        button.setAttribute('aria-label', motionEnabled ? 'พักแอนิเมชัน' : 'เปิดแอนิเมชัน');
+        button.title = motionEnabled ? 'พักแอนิเมชัน' : 'เปิดแอนิเมชัน';
+      });
+      if (motionEnabled) {
+        document.body.classList.remove('motion-reduced');
+        motionToggle.setAttribute('aria-pressed', 'true');
+        mobileMotionToggle.setAttribute('aria-pressed', 'true');
+        motionIcons.forEach(icon => icon.setAttribute('icon', 'ph:sparkle-fill'));
+      } else {
+        document.body.classList.add('motion-reduced');
+        motionToggle.setAttribute('aria-pressed', 'false');
+        mobileMotionToggle.setAttribute('aria-pressed', 'false');
+        motionIcons.forEach(icon => icon.setAttribute('icon', 'ph:sparkle'));
+      }
+      syncAnimation();
+    }
+
+    function toggleMotion() {
+      motionEnabled = !motionEnabled;
+      updateMotionState();
+    }
+
+    motionToggle.addEventListener('click', toggleMotion);
+    mobileMotionToggle.addEventListener('click', toggleMotion);
+
+    // Canvas Stars Animation
+    const canvas = document.getElementById('celestial-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let stars = [];
+    let shootingStar = null;
+    let animationFrame = 0;
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      // Cap DPR to 2 for performance
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      initStars();
+      syncAnimation();
+    }
+
+    function initStars() {
+      stars = [];
+      // Reduce particles on mobile
+      const numStars = width < 768 ? 28 : 70;
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 1.5 + 0.5,
+          opacity: Math.random() * 0.6 + 0.2,
+          speed: Math.random() * 0.004 + 0.002,
+          driftX: (Math.random() - 0.5) * 0.1,
+          driftY: (Math.random() - 0.5) * 0.1
+        });
+      }
+    }
+
+    function drawStars() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.fillStyle = '#F0EFEA';
+      stars.forEach(star => {
+        if (motionEnabled) star.opacity += star.speed;
+        if (star.opacity > 1 || star.opacity < 0) star.speed *= -1;
+
+        if (motionEnabled) { star.x += star.driftX; star.y += star.driftY; }
+        if(star.x < 0) star.x = width;
+        if(star.x > width) star.x = 0;
+        if(star.y < 0) star.y = height;
+        if(star.y > height) star.y = 0;
+
+        ctx.globalAlpha = Math.max(0, Math.min(1, star.opacity)) * 0.7;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Faint constellations, capped by the sparse particle count.
+      ctx.strokeStyle = '#779CC6';
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < stars.length; i++) {
+        for (let j = i + 1; j < stars.length; j++) {
+          const distance = Math.hypot(stars[i].x - stars[j].x, stars[i].y - stars[j].y);
+          if (distance < 100) {
+            ctx.globalAlpha = (1 - distance / 100) * 0.15;
+            ctx.beginPath(); ctx.moveTo(stars[i].x, stars[i].y); ctx.lineTo(stars[j].x, stars[j].y); ctx.stroke();
+          }
+        }
+      }
+      // Shooting star is decorative and never appears in static mode.
+      if (!motionEnabled) shootingStar = null;
+      if (shootingStar && motionEnabled) {
+        shootingStar.x += shootingStar.vx;
+        shootingStar.y += shootingStar.vy;
+        shootingStar.life -= 0.02;
+
+        if (shootingStar.life <= 0) {
+          shootingStar = null;
+        } else {
+          ctx.globalAlpha = shootingStar.life;
+          ctx.strokeStyle = '#8BD4EF';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(shootingStar.x, shootingStar.y);
+          ctx.lineTo(shootingStar.x - shootingStar.vx * 15, shootingStar.y - shootingStar.vy * 15);
+          ctx.stroke();
+        }
+      } else if (motionEnabled && Math.random() < 0.0015) { // Rare shooting star
+        shootingStar = {
+          x: Math.random() * width,
+          y: 0,
+          vx: Math.random() * 4 + 4,
+          vy: Math.random() * 2 + 2,
+          life: 1
+        };
+      }
+
+      ctx.globalAlpha = 1;
+    }
+
+    function loop() {
+      animationFrame = 0;
+      if (!motionEnabled || document.hidden || !ctx) return;
+      drawStars();
+      animationFrame = requestAnimationFrame(loop);
+    }
+
+    function syncAnimation() {
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      if (document.hidden || !ctx) return;
+      drawStars();
+      if (motionEnabled) animationFrame = requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', syncAnimation);
+    motionPreference.addEventListener('change', event => {
+      motionEnabled = !event.matches;
+      updateMotionState();
+    });
+    resize();
+    updateMotionState();
+
+    // Scroll Reveals
+    if ('IntersectionObserver' in window && !prefersReducedMotion) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    document.documentElement.classList.add('reveals-ready');
+    }
+
+    // Pointer Glow
+    if (window.matchMedia('(pointer: fine)').matches) document.querySelectorAll('.glow-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        if (!motionEnabled) return;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+
+    // Mobile Navigation Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    function toggleMobileMenu() {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.classList.add('text-[#F0EFEA]');
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.classList.remove('text-[#F0EFEA]');
+      }
+    }
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    document.querySelectorAll('.mobile-link').forEach(link => {
+       link.addEventListener('click', () => {
+          if (!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
+       });
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        toggleMobileMenu(); mobileMenuBtn.focus();
+      }
+    });
+
+    // Dialog Backdrop Close & Escape
+    const dialogOpeners = new WeakMap();
+    function openProject(id, opener) {
+      const dialog = document.getElementById(id);
+      dialogOpeners.set(dialog, opener);
+      dialog.showModal();
+      document.body.style.overflow = 'hidden';
+    }
+    document.querySelectorAll('dialog').forEach(dialog => {
+       dialog.addEventListener('keydown', event => {
+         if (event.key !== 'Tab') return;
+         const controls = [...dialog.querySelectorAll('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.disabled && el.getClientRects().length > 0);
+         const first = controls[0], last = controls[controls.length - 1];
+         if (!first) { event.preventDefault(); return; }
+         if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+         else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+       });
+       dialog.addEventListener('close', () => {
+         document.body.style.overflow = '';
+         dialogOpeners.get(dialog)?.focus();
+       });
+       dialog.addEventListener('click', (e) => {
+          const rect = dialog.getBoundingClientRect();
+          if (e.target === dialog && (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom)) dialog.close();
+       });
+    });
+
+    // Interactive Filter Logic
     function filterInterests(category) {
       const items = document.querySelectorAll('.interest-item');
       const buttons = document.querySelectorAll('.filter-btn');
-
-      // Apply filters synchronously so rapid selection cannot leave stale timers.
       items.forEach(item => {
         const visible = category === 'all' || item.dataset.category === category;
         item.hidden = !visible;
         item.style.display = visible ? 'flex' : 'none';
       });
-
-      // Update buttons styling
       buttons.forEach(btn => {
         btn.setAttribute('aria-pressed', String(btn.dataset.target === category));
         if (btn.dataset.target === category) {
-          btn.classList.add('bg-[#DAC495]', 'text-[#080D19]');
+          btn.classList.add('bg-[#8BD4EF]', 'text-[#080D19]');
           btn.classList.remove('bg-transparent', 'text-[#9AABC6]', 'border-[#283346]');
         } else {
-          btn.classList.remove('bg-[#DAC495]', 'text-[#080D19]');
+          btn.classList.remove('bg-[#8BD4EF]', 'text-[#080D19]');
           btn.classList.add('bg-transparent', 'text-[#9AABC6]', 'border-[#283346]');
         }
       });
     }
-
-    // Mobile Navigation Toggle
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      const btn = document.getElementById('mobile-menu-btn');
-      const isHidden = menu.classList.contains('hidden');
-
-      if (isHidden) {
-        menu.classList.remove('hidden');
-        btn.setAttribute('aria-expanded', 'true');
-        btn.classList.add('text-[#F0EFEA]');
-      } else {
-        menu.classList.add('hidden');
-        btn.setAttribute('aria-expanded', 'false');
-        btn.classList.remove('text-[#F0EFEA]');
-      }
-    }
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && document.getElementById('mobile-menu-btn').getAttribute('aria-expanded') === 'true') {
-        toggleMobileMenu();
-        document.getElementById('mobile-menu-btn').focus();
-      }
-    });
   </script>
 </body></html>
